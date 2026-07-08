@@ -198,7 +198,16 @@ class AgentWebService:
         # Add agent response to conversation
         conversation.append(response["messages"][-1])
        
-        response_dto = ChatResponseDTO(answer=response["messages"][-1].content)
+        #response_dto = ChatResponseDTO(answer=response["messages"][-1].content)
+        # Busca el contenido del último mensaje
+        last_content = response["messages"][-1].content
+
+        # Si es una lista (formato nuevo de Gemini), extrae el texto del primer elemento
+        if isinstance(last_content, list):
+            answer_text = last_content[0].get("text", "")
+        else:
+            answer_text = last_content
+        response_dto = ChatResponseDTO(answer=answer_text)
         beauty_var_log("FINAL RESPONSE DTO", response_dto)
         return response_dto
 

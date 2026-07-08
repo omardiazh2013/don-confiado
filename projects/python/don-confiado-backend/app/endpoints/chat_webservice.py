@@ -57,6 +57,7 @@ class ChatWebService:
 
         # Modelo y prompt del sistema
         llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+        
 
         system_prompt = """ROLE:
             Don Confiado, un asistente de inteligencia artificial que actúa como un asesor
@@ -146,10 +147,12 @@ class ChatWebService:
         reply = getattr(result, "content", str(result))
         _append_message(request.user_id, "ai", reply)
 
+        #return {
+        #    "reply": reply,
+        #}
         return {
-            "reply": reply,
+            "answer": reply,
         }
-
     # --- v1.1: Clasificación de intención + extracción y registro de distribuidor ---
     @chat_webservice_api_router.post("/api/chat_v1.1")
     async def chat_with_structure_output(self, request: ChatRequestDTO):
@@ -202,7 +205,9 @@ class ChatWebService:
 
         result = model_with_structure.invoke(classify_text)
         print(result)
-        user_intention = result[0]["args"].get("userintention")
+        #CAMBIO 1
+        #user_intention = result[0]["args"].get("userintention")
+        user_intention = result.get("userintention")
 
         if user_intention == "Other":
             # Rama 'Other': respuesta general con memoria
@@ -294,7 +299,7 @@ class ChatWebService:
             print(ai_result)
             return {
                 "userintention": "Other",
-                "reply": reply,
+                "answer": reply,
             }
         else:
             # Rama 'Create_distribuitor': validar completitud y luego extraer datos
@@ -332,8 +337,11 @@ class ChatWebService:
 
             completeness = completeness_model.invoke(completeness_text)
             print(completeness)
-            is_complete = bool(completeness[0]["args"].get("is_complete", False))
-            missing_fields = completeness[0]["args"].get("missing_fields", []) or []
+            #CAMBIO 2
+            #is_complete = bool(completeness[0]["args"].get("is_complete", False))
+            #missing_fields = completeness[0]["args"].get("missing_fields", []) or []
+            is_complete = bool(completeness.get("is_complete", False))
+            missing_fields = completeness.get("missing_fields", []) or []
 
             if not is_complete:
                 # Solicitud de datos faltantes (prompt plano + memoria)
@@ -357,7 +365,7 @@ class ChatWebService:
                     "userintention": "Create_distribuitor",
                     "status": "need_more_data",
                     "missing_fields": missing_fields,
-                    "reply": reply_text,
+                    "answer": reply_text,
                 }
 
             # 2) Extracción de datos (solo cuando está completo)
@@ -391,9 +399,12 @@ class ChatWebService:
                 "Si un campo no está presente, omítelo (no devuelvas null).\n\n"
                 f"Mensaje del usuario: {request.message}"
             )
-            extracted_payload = extractor.invoke(extract_text)
-            print(extracted_payload)
-            extracted = extracted_payload[0]["args"] if isinstance(extracted_payload, list) else extracted_payload
+            #CAMBIO 3
+            #extracted_payload = extractor.invoke(extract_text)
+            #print(extracted_payload)
+            extracted = extractor.invoke(extract_text)
+            print(extracted)
+            #extracted = extracted_payload[0]["args"] if isinstance(extracted_payload, list) else extracted_payload
             tipo_documento = extracted.get("tipo_documento")
             numero_documento = extracted.get("numero_documento")
             razon_social = extracted.get("razon_social")
@@ -432,7 +443,7 @@ class ChatWebService:
                     "userintention": "Create_distribuitor",
                     "status": "error",
                     "error": "Missing Supabase credentials",
-                    "reply": reply_text,
+                    "answer": reply_text,
                     "extracted": extracted,
                 }
 
@@ -467,7 +478,7 @@ class ChatWebService:
                     "userintention": "Create_distribuitor",
                     "status": "created",
                     "data": data,
-                    "reply": reply_text,
+                    "answer": reply_text,
                 }
             except Exception as e:
                 # Manejo de error al crear distribuidor (prompt plano)
@@ -487,6 +498,6 @@ class ChatWebService:
                     "userintention": "Create_distribuitor",
                     "status": "error",
                     "error": str(e),
-                    "reply": reply_text,
+                    "answer": reply_text,
                     "extracted": extracted,
                 }

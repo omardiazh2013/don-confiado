@@ -33,7 +33,7 @@ GOOGLE_API_KEY=tu_api_key_de_google
 
 # Postgres (con pgvector instalado)
 donconfiado_db_user=usuario
-donconfiado_db_password=clave
+donconfiado_db_password=clave v9JTPSWWLXcNYi0k
 donconfiado_db_host=localhost
 donconfiado_db_port=5432
 donconfiado_db_dbname=donconfiado

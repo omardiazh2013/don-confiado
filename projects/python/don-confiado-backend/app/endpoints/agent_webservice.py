@@ -272,7 +272,7 @@ class AgentWebService:
             print("========= INTERRUPT DETECTED (APPROVAL REQUIRED)=========")
             print(type(response['__interrupt__']),"\n",response["__interrupt__"])
             interrupt_message = """Lo que quieres hacer requiere tu aprobación. Responde *si* o *yes* para aprobar, o *no* o *reject* para rechazar."""
-            interrupt_message += f"\n\nDetalle de la acción pendiente:\n{response['__interrupt__'][0].value["action_requests"][0]["description"]}"
+            interrupt_message += f"\n\nDetalle de la acción pendiente:\n{response['__interrupt__'][0].value['action_requests'][0]['description']}"
             response_dto = ChatResponseDTO(answer=interrupt_message)
 
             # Guardamos la solicitud de aprobación pendiente, para que en el siguiente llamado evalue la respuesta del usuario

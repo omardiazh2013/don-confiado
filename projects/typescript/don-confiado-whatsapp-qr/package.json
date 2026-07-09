@@ -11,7 +11,7 @@
     "typescript": "^5.8.3"
   },
   "scripts": {
-    "start:wa": "yarn tsx src/index.ts",
+    "start:wa": "yarn tsx src/server.ts",
     "start:chat": "yarn tsx src/index.ts chat"
   }
 }

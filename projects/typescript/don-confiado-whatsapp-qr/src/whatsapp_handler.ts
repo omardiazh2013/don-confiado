@@ -25,7 +25,8 @@ function fileToBase64(path: string): string {
 
 
 class WhatsAppHandler {
-  private  BACKEND_URL:string = `http://127.0.0.1:8000/api/chat_v1.1`;
+  private BACKEND_URL: string = "https://backend-demo-6b6e.up.railway.app/api/chat_v1.1";
+  private onQRCallback?: (qr: string) => void;
   private sock!: WASocket;
   private qrAttempts = 0;
   private readonly maxQrAttempts = 3;
@@ -56,13 +57,16 @@ class WhatsAppHandler {
 
   async initSaveCredentials() {}
 
-  constructor() {
+  constructor(backendUrl?: string, onQRCallback?: (qr: string) => void) {
+    this.BACKEND_URL = backendUrl || process.env.BACKEND_URL || "https://backend-demo-6b6e.up.railway.app/api/chat_v1.1";
+    this.onQRCallback = onQRCallback;
+    
     // Bind methods to this instance
     this.saveCreds = async () => {};
     this.onCredsUpdate = this.onCredsUpdate.bind(this);
     this.onMessagesUpsert = this.onMessagesUpsert.bind(this);
     this.onConnectionUpdate = this.onConnectionUpdate.bind(this);
-  }
+}
 
   onCredsUpdate(q: any) {
     console.log(
@@ -212,7 +216,10 @@ class WhatsAppHandler {
       process.exit(1);
       return;
     }
-
+    // Llamar al callback si existe (para el servidor Express)
+    if (this.onQRCallback) {
+      this.onQRCallback(qr);
+    }
     QRCode.toString(qr, { type: "terminal", small: true }, (err, url) => {
       if (err) return console.error("Error generating QR:", err);
       console.log(url);

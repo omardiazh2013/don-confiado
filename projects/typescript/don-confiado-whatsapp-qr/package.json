@@ -3,10 +3,12 @@
   "private": true,
   "dependencies": {
     "@whiskeysockets/baileys": "^6.7.20",
+    "express": "^5.2.1",
     "qrcode": "^1.5.4",
     "tsx": "^4.19.4"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/qrcode": "^1.5.5",
     "typescript": "^5.8.3"
   },

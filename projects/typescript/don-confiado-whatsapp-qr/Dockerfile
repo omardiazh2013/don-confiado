@@ -19,3 +19,4 @@ EXPOSE 3000
 
 # Comando por defecto
 CMD ["yarn", "start:wa"]
+# Cache buster Thu Jul  9 18:08:32 -05 2026

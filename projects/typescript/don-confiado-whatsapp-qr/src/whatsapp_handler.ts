@@ -29,7 +29,7 @@ class WhatsAppHandler {
   private onQRCallback?: (qr: string) => void;
   private sock!: WASocket;
   private qrAttempts = 0;
-  private readonly maxQrAttempts = 3;
+  private readonly maxQrAttempts = 10;
   private saveCreds: () => Promise<void> | null;
   //private readonly restartSock: () => Promise<void>;
   private authState: AuthenticationState | undefined;
@@ -212,8 +212,8 @@ class WhatsAppHandler {
       console.log(
         "❌ Demasiados intentos de escaneo de QR. Cerrando conexión..."
       );
-      await this.sock.logout();
-      process.exit(1);
+      this.qrAttempts = 0;
+      await this.initSocket(); // Reiniciar en lugar de cerrar
       return;
     }
     // Llamar al callback si existe (para el servidor Express)

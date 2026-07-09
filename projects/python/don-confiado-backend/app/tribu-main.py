@@ -49,5 +49,5 @@ if __name__ == "__main__":
     app.include_router(graphrag_api_router)
     
        
-    logger.info("Server starting on http://127.0.0.1:8000")
+    logger.info("Server starting on http://0.0.0.0:8000")
     uvicorn.run(app, host="0.0.0.0", port=8000, log_config=None)

@@ -27,12 +27,12 @@ const sessions: Record<string, string> = {};
 
 // Demos disponibles
 const DEMOS = [
-  { id: "chat_v1.0", name: "v1.0 - Chat con Memoria", description: "Chat básico con memoria de conversación" },
-  { id: "chat_v1.1", name: "v1.1 - Extracción de Datos", description: "Clasificación + extracción + Supabase" },
-  { id: "chat_v2.0", name: "v2.0 - Facturas Multimodal", description: "Procesamiento de facturas con imágenes" },
-  { id: "chat_v3.0", name: "v3.0 - Agente Avanzado", description: "Agente con capacidades avanzadas" },
-  { id: "chat_v3.1", name: "v3.1 - Agente HITL", description: "Agente con aprobación humana" },
-  { id: "chat_clase_03", name: "RAG - Búsqueda Productos", description: "Búsqueda inteligente en catálogo" },
+  { id: "chat_v1.0", name: "🧠 Asesor Básico", description: "Conversa con tu cliente y recuerda todo lo que te dice" },
+  { id: "chat_v1.1", name: "📋 Registro de Proveedores", description: "Registra proveedores automáticamente solo hablando por WhatsApp" },
+  { id: "chat_v2.0", name: "📸 Lector de Facturas", description: "Toma foto a una factura y registra productos y proveedores al instante" },
+  { id: "chat_v3.0", name: "🤖 Asistente Inteligente", description: "Consulta inventario, alertas y recomendaciones en tiempo real" },
+  { id: "chat_v3.1", name: "✅ Control del Dueño", description: "El dueño aprueba cada acción importante desde WhatsApp" },
+  { id: "chat_clase_03", name: "🔍 Buscador de Catálogo", description: "Encuentra cualquier producto al instante con lenguaje natural" },
 ];
 
 // Función para iniciar WhatsApp con versión seleccionada
@@ -264,14 +264,14 @@ app.get("/dashboard", async (req: Request, res: Response) => {
     </head>
     <body>
       <div class="header">
-        <h1>🤝 Don Confiado - Portal de Demos</h1>
+        <h1>🤝 Don Confiado - Tu Socio de Ventas</h1>
         <a href="/logout" class="logout">Cerrar Sesión</a>
       </div>
       
       <div class="container">
         <!-- Selector de demos -->
         <div class="section">
-          <h2>🎯 Selecciona el Demo</h2>
+          <h2>💼 ¿Qué le quieres mostrar a tu cliente?</h2>
           ${demosHTML}
         </div>
 

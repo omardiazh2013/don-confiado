@@ -9,7 +9,7 @@ from fastapi_utils.cbv import cbv
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage, AIMessage
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 from supabase import create_client, Client
 
 # Local imports
@@ -386,7 +386,7 @@ class ChatWebService02:
             Dict with chat response, detected intention, and saved entities
         """
         # Initialize LLM
-        llm = init_chat_model("gemini-2.0-flash", model_provider="google_genai", api_key=self.GOOGLE_API_KEY)
+        llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
         
         print("=========REQUEST=========")
         print(request)

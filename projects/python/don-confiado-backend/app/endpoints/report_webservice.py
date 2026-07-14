@@ -1,3 +1,4 @@
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 # Standard library imports
 from typing import TypedDict, List, Dict, Any, Optional, Literal
 import os
@@ -101,7 +102,7 @@ class ReportWebService:
         load_dotenv()
         self.GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
         # Keep LLM allocated for future real nodes; mocks do not use it.
-        self.llm = init_chat_model("gemini-2.5-flash", model_provider="google_genai", api_key=self.GOOGLE_API_KEY)
+        self.llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
         # Refinement cap
         self.MAX_REFINEMENT_ITERATIONS = int(os.getenv("MAX_REFINEMENT_ITERATIONS", 2))
 

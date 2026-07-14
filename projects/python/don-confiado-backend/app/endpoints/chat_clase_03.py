@@ -25,7 +25,7 @@ chat_clase_03_api_router = APIRouter()
 # Google GenAI embeddings expect fully-qualified model id: "models/text-embedding-004"
 EMBEDDING_MODEL_NAME = "models/text-embedding-004"  # 768-dim as of Google GenAI
 EMBEDDING_DIM = 768 #dimensiones del embedding
-CHAT_MODEL_NAME = "gemini-2.5-flash"
+CHAT_MODEL_NAME = "meta/llama-3.3-70b-instruct"
 
 
 DONCONFIADO_RAG_SYSTEM = (

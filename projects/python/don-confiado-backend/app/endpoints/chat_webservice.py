@@ -3,7 +3,7 @@ from fastapi_utils.cbv import cbv
 
 import os
 from dotenv import load_dotenv
-from langchain_google_genai import ChatGoogleGenerativeAI
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 """Chat endpoints sin utilizar helpers de memoria de LangChain.
 
 Se usa un almacenamiento en memoria simple (dict + listas) por usuario
@@ -56,7 +56,7 @@ class ChatWebService:
             os.environ["GOOGLE_API_KEY"] = api_key
 
         # Modelo y prompt del sistema
-        llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+        llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
         
 
         system_prompt = """ROLE:
@@ -162,7 +162,7 @@ class ChatWebService:
             os.environ["GOOGLE_API_KEY"] = api_key
 
         # Modelo base
-        llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash")
+        llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
 
         # Registrar el mensaje actual en memoria y construir historial
         user_input = request.message

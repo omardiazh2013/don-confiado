@@ -1,3 +1,4 @@
+from langchain_nvidia_ai_endpoints import ChatNVIDIA
 # Standard library imports
 import os
 import uuid
@@ -119,11 +120,11 @@ class AgentWebService:
         """Initialize the chat service with environment variables and conversation storage."""
         print("*******************INITIALIZING CHAT WEB SERVICE**************")
         self.GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-        self.gemini_model = init_chat_model("gemini-2.0-flash", model_provider="google_genai",  api_key=self.GOOGLE_API_KEY)
+        self.gemini_model = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
 
 
         #construct the LLM and tools and middleware
-        self.llm = init_chat_model("gemini-2.5-flash", model_provider="google_genai", api_key=self.GOOGLE_API_KEY)
+        self.llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
         self.tools = create_tools_array()
         self.middleware=[
             HumanInTheLoopMiddleware( 

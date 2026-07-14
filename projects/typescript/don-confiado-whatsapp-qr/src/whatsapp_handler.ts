@@ -179,7 +179,7 @@ class WhatsAppHandler {
             
             body: JSON.stringify({
               message: message,              
-              user_id: msg.key.remoteJid,
+              user_id: msg.key.remoteJid?.replace('@s.whatsapp.net', '').replace('@lid', '').split(':')[0] || msg.key.remoteJid,
               mime_type: mime_type,
               file_base64: mime_type ? fileToBase64(filename) : null
             }),

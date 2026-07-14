@@ -21,19 +21,36 @@ load_dotenv()
 chat_webservice_api_router = APIRouter()
 
 # Memoria en proceso por usuario: { user_id: [ {"role": "human"|"ai", "content": str }, ... ] }
-_memory_store = {}
-
+# Supabase client para memoria persistente
+def _get_supabase():
+    url = os.getenv("SUPABASE_URL")
+    key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    return create_client(url, key)
 
 def _get_history(user_id: str):
-    if user_id not in _memory_store:
-        _memory_store[user_id] = []
-    return _memory_store[user_id]
-
+    try:
+        supabase = _get_supabase()
+        result = supabase.table("chat_history") \
+            .select("role, content") \
+            .eq("user_id", user_id) \
+            .order("created_at") \
+            .limit(20) \
+            .execute()
+        return result.data or []
+    except Exception as e:
+        print(f"Error obteniendo historial: {e}")
+        return []
 
 def _append_message(user_id: str, role: str, content: str) -> None:
-    history = _get_history(user_id)
-    history.append({"role": role, "content": content})
-
+    try:
+        supabase = _get_supabase()
+        supabase.table("chat_history").insert({
+            "user_id": user_id,
+            "role": role,
+            "content": content
+        }).execute()
+    except Exception as e:
+        print(f"Error guardando mensaje: {e}")
 
 def _history_as_text(user_id: str) -> str:
     lines = []
@@ -43,7 +60,6 @@ def _history_as_text(user_id: str) -> str:
         elif msg.get("role") == "ai":
             lines.append(f"Asistente: {msg.get('content', '')}")
     return "\n".join(lines)
-
 
 @cbv(chat_webservice_api_router)
 class ChatWebService:

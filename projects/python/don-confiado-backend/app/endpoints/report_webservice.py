@@ -102,7 +102,7 @@ class ReportWebService:
         load_dotenv()
         self.GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
         # Keep LLM allocated for future real nodes; mocks do not use it.
-        self.llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
+        self.llm = ChatNVIDIA(model="meta/llama-3.1-8b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
         # Refinement cap
         self.MAX_REFINEMENT_ITERATIONS = int(os.getenv("MAX_REFINEMENT_ITERATIONS", 2))
 

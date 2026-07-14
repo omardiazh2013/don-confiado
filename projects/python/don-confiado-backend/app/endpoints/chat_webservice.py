@@ -56,7 +56,7 @@ class ChatWebService:
             os.environ["GOOGLE_API_KEY"] = api_key
 
         # Modelo y prompt del sistema
-        llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
+        llm = ChatNVIDIA(model="meta/llama-3.1-8b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
         
 
         system_prompt = """ROLE:
@@ -162,7 +162,7 @@ class ChatWebService:
             os.environ["GOOGLE_API_KEY"] = api_key
 
         # Modelo base
-        llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
+        llm = ChatNVIDIA(model="meta/llama-3.1-8b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
 
         # Registrar el mensaje actual en memoria y construir historial
         user_input = request.message

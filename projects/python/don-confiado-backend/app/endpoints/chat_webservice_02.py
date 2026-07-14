@@ -386,7 +386,7 @@ class ChatWebService02:
             Dict with chat response, detected intention, and saved entities
         """
         # Initialize LLM
-        llm = ChatNVIDIA(model="meta/llama-3.3-70b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
+        llm = ChatNVIDIA(model="meta/llama-3.1-8b-instruct", nvidia_api_key=os.getenv("NVIDIA_API_KEY"))
         
         print("=========REQUEST=========")
         print(request)

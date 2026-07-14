@@ -9,7 +9,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 let currentQR: string | null = null;
-let currentVersion = process.env.DEFAULT_DEMO || "chat_v1.1";
+let currentVersion = process.env.DEFAULT_DEMO || "chat_v1.0";
 let handler: WhatsAppHandler | null = null;
 let isConnected = false;
 
@@ -27,79 +27,103 @@ const DEMOS = [
     id: "chat_v1.0",
     name: "🧠 Asesor Básico",
     description: "Conversa con tu cliente y recuerda todo lo que te dice",
-    contexto: "Don Pedro tiene una tienda de repuestos y atiende 30 clientes al día. Cada vez que alguien llama, tiene que buscar el historial a mano.",
+    contexto: "Don Pedro tiene una tienda de repuestos y atiende 30 clientes al día. Ya usa WhatsApp Business con el bot gratuito de Meta, pero cada vez que un cliente vuelve, el bot no recuerda nada de conversaciones anteriores.",
+    ventajaMeta: "⚡ Meta AI GRATIS hace esto... pero solo recuerda la conversación actual. Don Confiado recuerda el historial completo del cliente, su negocio y sus preferencias para siempre.",
     pasos: [
-      { mensaje: "Hola, soy Pedro y tengo una tienda de repuestos para motos", tip: "El cliente se presenta. Observa cómo Don Confiado lo saluda y recuerda su negocio." },
-      { mensaje: "¿Cuáles son mis productos más rentables?", tip: "Pregunta de negocio. Fíjate cómo el asistente recuerda que es una tienda de repuestos." },
-      { mensaje: "¿Cómo me llamo y qué negocio tengo?", tip: "¡Aquí viene el WOW! El asistente demuestra que recuerda TODO lo que dijiste antes." },
-      { mensaje: "Ayúdame a crear un mensaje de bienvenida para mis clientes nuevos", tip: "Muestra la versatilidad. El asistente usa el contexto del negocio para crear contenido útil." },
+      { mensaje: "Hola, soy Pedro y tengo una tienda de repuestos para motos en Bogotá", tip: "El cliente se presenta. Don Confiado guarda este contexto permanentemente, no solo para esta sesión." },
+      { mensaje: "Mis clientes más frecuentes son talleres mecánicos que compran filtros y aceites", tip: "Más contexto del negocio. El bot de Meta olvida esto al cerrar el chat. Don Confiado nunca lo olvida." },
+      { mensaje: "¿Cómo me llamo, dónde estoy y a quién le vendo?", tip: "¡MOMENTO WOW! Demuestra memoria persistente. El bot gratuito de Meta fallaría aquí. Don Confiado recuerda todo." },
+      { mensaje: "Escríbeme un mensaje de WhatsApp para enviarle a mis clientes talleros sobre una promoción de aceite 20W50", tip: "Usa el contexto del negocio para crear contenido personalizado. Meta solo hace respuestas genéricas." },
     ],
-    argumento: "Imagina que cada cliente llega y tu asistente ya sabe quién es, qué compra y qué necesita. Eso es lo que hace Don Confiado: convierte cada conversación en una oportunidad de venta personalizada.",
+    argumento: "El bot de WhatsApp Business de Meta es gratuito pero es un bot de preguntas frecuentes. Don Confiado es un asistente que CONOCE tu negocio. La diferencia: Meta responde. Don Confiado recuerda, aprende y actúa.",
+    metaComparacion: "Meta WhatsApp Business (gratis) vs Don Confiado",
+    metaLimite: "Meta: responde FAQs, olvida al cerrar chat, sin memoria entre sesiones",
+    donConfiado: "Don Confiado: memoria permanente por cliente, contexto de negocio, respuestas personalizadas",
   },
   {
     id: "chat_v1.1",
     name: "📋 Registro de Proveedores",
-    description: "Registra proveedores automáticamente solo hablando por WhatsApp",
-    contexto: "María tiene una distribuidora y cada semana llegan 5 proveedores nuevos. Llenar formularios y Excel le toma 20 minutos por proveedor.",
+    description: "Registra proveedores en tu base de datos solo hablando por WhatsApp",
+    contexto: "María tiene una distribuidora y ya probó el bot de Meta para atender clientes. Funciona bien para ventas, pero cuando necesita registrar un proveedor nuevo en su sistema, el bot de Meta no puede hacer nada.",
+    ventajaMeta: "⚡ Meta AI NO puede escribir en bases de datos externas. Solo puede responder preguntas. Don Confiado conecta directamente con tu sistema y registra datos reales.",
     pasos: [
-      { mensaje: "Necesito crear un nuevo proveedor", tip: "El asistente entiende la intención y comienza a guiar el proceso automáticamente." },
-      { mensaje: "NIT 900123456, Razón Social Distribuidora El Sol SAS", tip: "Solo dicta los datos como si hablaras con un asistente humano. Observa cómo los captura." },
-      { mensaje: "Dirección: Calle 45 # 23-10, Bogotá. Teléfono: 3001234567", tip: "Sigue dictando. El sistema extrae y organiza cada dato automáticamente." },
-      { mensaje: "¿Quedó bien registrado el proveedor?", tip: "El momento WOW: el sistema confirma el registro completo sin ningún formulario." },
+      { mensaje: "Necesito crear un nuevo proveedor en el sistema", tip: "Meta responde 'Lo siento, no puedo hacer eso'. Don Confiado pregunta los datos y actúa." },
+      { mensaje: "NIT 900123456, Razón Social Distribuidora El Sol SAS", tip: "Don Confiado extrae NIT y razón social automáticamente y los prepara para guardar en la BD." },
+      { mensaje: "Dirección: Calle 45 # 23-10, Bogotá. Teléfono: 3001234567", tip: "Sigue extrayendo datos. Ningún bot de Meta puede hacer esto en tu base de datos real." },
+      { mensaje: "¿Quedó bien registrado el proveedor?", tip: "MOMENTO WOW: confirmación de registro real en base de datos. Meta solo puede mostrar información, nunca escribir." },
     ],
-    argumento: "En vez de abrir un sistema, buscar el módulo, llenar 15 campos y guardar... tu equipo simplemente habla. Don Confiado hace el trabajo administrativo por ellos. Ahorra 18 minutos por proveedor.",
+    argumento: "El agente de Meta está diseñado para el FRENTE del negocio: atender clientes. Don Confiado trabaja en el BACKOFFICE: registra, organiza y automatiza tus procesos internos. Eso vale entre $150 y $500/mes para una PYME, no $20.",
+    metaComparacion: "Meta WhatsApp Business vs Don Confiado en BackOffice",
+    metaLimite: "Meta: no puede escribir en bases de datos externas, sin integración con ERP/inventarios",
+    donConfiado: "Don Confiado: escritura directa en BD, integración con sistemas internos, automatización de procesos",
   },
   {
     id: "chat_v2.0",
     name: "📸 Lector de Facturas",
     description: "Toma foto a una factura y registra productos y proveedores al instante",
-    contexto: "Carlos recibe 50 facturas al mes de sus proveedores. Su asistente tarda 2 horas diarias digitando datos en el sistema.",
+    contexto: "Carlos sabe que Meta AI puede describir imágenes. Intentó mandarle fotos de facturas al bot de Meta pero solo le describía la imagen. No extraía los datos ni los registraba en ningún sistema.",
+    ventajaMeta: "⚡ Meta AI puede DESCRIBIR una factura ('veo una factura de $500.000'). Don Confiado la PROCESA: extrae NIT, productos, precios y los registra en tu sistema contable.",
     pasos: [
-      { mensaje: "Analiza esta factura y crea el producto y proveedor si aplica", tip: "Envía este mensaje JUNTO con una foto de una factura. El sistema lee la imagen automáticamente." },
-      { mensaje: "¿Qué datos encontraste en la factura?", tip: "El asistente muestra todos los datos que extrajo: productos, precios, proveedor, NIT, fechas." },
-      { mensaje: "¿Cuánto me costó el producto más caro de la factura?", tip: "Ahora puedes hacerle preguntas sobre la factura como si hablaras con un contador." },
-      { mensaje: "Crea una alerta si el precio de ese producto sube más del 10%", tip: "Muestra el poder de automatización: el sistema entiende instrucciones complejas de negocio." },
+      { mensaje: "Analiza esta factura y crea el producto y proveedor si aplica", tip: "Envía CON una foto de factura. Meta diría 'es una factura de X empresa'. Don Confiado extrae y registra." },
+      { mensaje: "¿Qué datos exactos encontraste en la factura?", tip: "Don Confiado lista NIT, razón social, productos, precios unitarios, totales. Meta no estructura esta información." },
+      { mensaje: "¿Cuánto me costó el producto más caro de esta factura?", tip: "Consulta inteligente sobre los datos ya extraídos. Meta no puede hacer esto porque no almacenó nada." },
+      { mensaje: "Crea una alerta si ese producto sube más del 10% en la próxima factura", tip: "MOMENTO WOW: automatización contable real. Meta no tiene memoria entre facturas ni puede crear alertas de negocio." },
     ],
-    argumento: "Tu equipo dedica 2 horas al día digitando facturas. Con Don Confiado, eso se convierte en 10 segundos por factura. Si tienes 50 facturas al mes, ahorras 40 horas mensuales de trabajo.",
+    argumento: "Meta AI ve facturas. Don Confiado las procesa, las registra y las convierte en inteligencia de negocio. Si tienes 50 facturas al mes, ahorras 40 horas de digitación manual. Eso es más valioso que cualquier suscripción de Meta.",
+    metaComparacion: "Meta AI Vision vs Don Confiado OCR + Integración",
+    metaLimite: "Meta: describe imágenes pero no extrae datos estructurados ni los registra en sistemas",
+    donConfiado: "Don Confiado: extrae, estructura y registra datos de facturas en tu base de datos en tiempo real",
   },
   {
     id: "chat_v3.0",
     name: "🤖 Asistente Inteligente",
-    description: "Consulta inventario, alertas y recomendaciones en tiempo real",
-    contexto: "Ana tiene un supermercado y se le agotan productos sin darse cuenta. Pierde ventas todos los días por no tener el inventario actualizado.",
+    description: "Consulta inventario, alertas y recomendaciones conectado a tu base de datos",
+    contexto: "Ana tiene un supermercado. El agente Enterprise de Meta cuesta miles de dólares y requiere ingenieros para integrarlo con el inventario. Don Confiado hace lo mismo a una fracción del costo.",
+    ventajaMeta: "⚡ Meta Enterprise AI puede conectarse a inventarios PERO cuesta miles de dólares/mes y requiere equipo técnico. Don Confiado ofrece las mismas capacidades para PYMEs a $150-500/mes.",
     pasos: [
-      { mensaje: "¿Qué productos están por agotarse esta semana?", tip: "El asistente consulta la base de datos en tiempo real y genera una lista priorizada de alertas." },
-      { mensaje: "¿Cuál fue el producto más vendido el mes pasado?", tip: "Análisis de ventas instantáneo. Sin reportes, sin Excel, sin esperar al contador." },
-      { mensaje: "Recomiéndame qué pedir a mis proveedores esta semana", tip: "El WOW más grande: el asistente cruza ventas + inventario + proveedores y hace recomendaciones inteligentes." },
-      { mensaje: "Genera la orden de compra para el proveedor principal", tip: "De la recomendación a la acción en un mensaje. El asistente crea documentos de negocio automáticamente." },
+      { mensaje: "¿Qué productos están por agotarse esta semana?", tip: "Consulta directa a BD en tiempo real. Meta Enterprise haría esto, pero a 10x el costo. Don Confiado lo hace para PYMEs." },
+      { mensaje: "¿Cuál fue el producto más vendido el mes pasado?", tip: "Análisis de ventas instantáneo. Sin reportes, sin Excel, sin esperar. Esto es lo que Meta cobra como Enterprise." },
+      { mensaje: "Recomiéndame qué pedir a mis proveedores esta semana", tip: "MOMENTO WOW: inteligencia de negocio real. Cruza ventas + inventario + proveedores. Meta no hace esto en plan básico." },
+      { mensaje: "Genera la orden de compra para el proveedor principal", tip: "De análisis a acción en un mensaje. Don Confiado crea documentos reales. Meta solo puede sugerir, no ejecutar." },
     ],
-    argumento: "Tus mejores decisiones de negocio las tomas con información. Don Confiado pone toda la inteligencia de tu negocio en tu WhatsApp, disponible 24/7 para ti y tu equipo.",
+    argumento: "Lo que Meta cobra como solución Enterprise ($2.000+/mes, con equipo de ingenieros), Don Confiado lo ofrece a PYMEs colombianas desde $150/mes. Mismas capacidades, precio accesible, implementación en días.",
+    metaComparacion: "Meta Enterprise AI vs Don Confiado para PYMEs",
+    metaLimite: "Meta Enterprise: costoso, requiere ingenieros, meses de implementación, diseñado para grandes empresas",
+    donConfiado: "Don Confiado: asequible, listo en días, diseñado para PYMEs, soporte local en español",
   },
   {
     id: "chat_v3.1",
     name: "✅ Control del Dueño",
-    description: "El dueño aprueba cada acción importante desde WhatsApp",
-    contexto: "Roberto tiene 3 empleados que manejan pagos y compras. Le da miedo delegar porque no puede controlar lo que hacen en tiempo real.",
+    description: "El dueño aprueba cada acción importante antes de ejecutarse",
+    contexto: "Roberto leyó que Meta AI puede automatizar procesos. Pero le preocupa: ¿quién controla que el bot no cometa errores costosos? Con Meta, no hay forma de pedir aprobación humana antes de ejecutar.",
+    ventajaMeta: "⚡ Meta AI ejecuta acciones automáticamente sin pedir permiso. Don Confiado implementa Human-in-the-Loop: NADA se ejecuta sin tu aprobación explícita. Tú tienes el control total.",
     pasos: [
-      { mensaje: "Registra el pago de $500.000 al proveedor Distribuidora El Sol", tip: "El empleado solicita registrar un pago. Observa lo que pasa a continuación." },
-      { mensaje: "si", tip: "El dueño aprueba con un simple 'si'. El sistema registra y confirma el pago solo cuando hay aprobación." },
-      { mensaje: "Muéstrame todos los pagos aprobados hoy", tip: "Control total: el dueño puede ver en cualquier momento qué se ha movido en su negocio." },
-      { mensaje: "no", tip: "Prueba rechazando una acción. El sistema se detiene y notifica que fue rechazada. Control total garantizado." },
+      { mensaje: "Registra el pago de $500.000 al proveedor Distribuidora El Sol", tip: "Don Confiado PAUSA y pide aprobación. Meta haría esto automáticamente sin consultarte. ¿Confiarías en eso?" },
+      { mensaje: "si", tip: "SOLO después de tu 'si' explícito se ejecuta. Esto es lo que las grandes empresas llaman governance de IA." },
+      { mensaje: "Muéstrame todos los pagos aprobados hoy", tip: "Trazabilidad completa: sabes exactamente qué aprobaste y cuándo. Meta no ofrece este nivel de control a PYMEs." },
+      { mensaje: "no", tip: "MOMENTO WOW: el sistema se detiene inmediatamente. Con Meta, ya sería tarde. Con Don Confiado, tú siempre tienes la última palabra." },
     ],
-    argumento: "Delega sin perder el control. Tu equipo puede operar con autonomía mientras tú tienes la última palabra en cada movimiento importante. Todo desde tu WhatsApp, sin importar dónde estés.",
+    argumento: "Meta automatiza. Don Confiado automatiza CON control. Para un dueño de PYME que no puede pagar errores, la diferencia es crítica. La gobernanza de IA no es un lujo: es una necesidad del negocio.",
+    metaComparacion: "Meta AI Automation vs Don Confiado Human-in-the-Loop",
+    metaLimite: "Meta: ejecución automática sin aprobación humana, difícil de auditar, sin trazabilidad por dueño",
+    donConfiado: "Don Confiado: aprobación explícita requerida, trazabilidad completa, el dueño siempre tiene control",
   },
   {
     id: "chat_clase_03",
     name: "🔍 Buscador de Catálogo",
-    description: "Encuentra cualquier producto al instante con lenguaje natural",
-    contexto: "Luis tiene una ferretería con 2.000 productos. Cuando un cliente pregunta por algo específico, su vendedor tarda 5 minutos buscando en el sistema.",
+    description: "Encuentra cualquier producto con lenguaje natural conectado a tu inventario real",
+    contexto: "Luis tiene 2.000 productos en su ferretería. Meta AI puede responder preguntas generales sobre ferretería, pero no conoce el catálogo específico de Luis ni sus precios reales.",
+    ventajaMeta: "⚡ Meta AI conoce ferretería en general (datos de internet). Don Confiado conoce TU ferretería: tus precios, tu stock, tus proveedores. Esa es la diferencia entre IA genérica e IA de tu negocio.",
     pasos: [
-      { mensaje: "¿Qué precio y stock tiene el tornillo hexagonal de 3/8?", tip: "Búsqueda en lenguaje natural. Sin códigos, sin categorías. Solo pregunta como le hablarías a un experto." },
-      { mensaje: "¿Tienes algo similar pero más económico?", tip: "El WOW: el sistema entiende contexto y sugiere alternativas. Como un vendedor experto que conoce todo el catálogo." },
-      { mensaje: "¿Cuál es el producto más vendido de tornillería?", tip: "Análisis de ventas del catálogo al instante. Tu vendedor nunca más dirá 'déjame verificar'." },
-      { mensaje: "¿Qué necesito para instalar una puerta de madera?", tip: "El nivel más alto: el asistente agrupa productos por necesidad del cliente, aumentando el ticket de venta." },
+      { mensaje: "¿Qué precio y stock tiene el tornillo hexagonal de 3/8?", tip: "Meta respondería con precios genéricos de internet. Don Confiado responde con TUS precios reales de tu inventario." },
+      { mensaje: "¿Tienes algo similar pero más económico?", tip: "Don Confiado busca en TU catálogo real. Meta sugeriría marcas genéricas que quizás ni vendes." },
+      { mensaje: "¿Cuál es el producto más vendido de tornillería este mes?", tip: "MOMENTO WOW: análisis de TUS ventas reales. Meta no tiene acceso a tu historial de ventas. Don Confiado sí." },
+      { mensaje: "¿Qué necesito para instalar una puerta de madera?", tip: "Don Confiado agrupa productos DE TU catálogo por necesidad. Aumenta el ticket de venta con productos que realmente tienes." },
     ],
-    argumento: "Cada vez que un cliente pregunta y tu vendedor no sabe la respuesta, pierdes una venta. Don Confiado convierte a cualquier empleado en un experto de tu catálogo desde el primer día.",
+    argumento: "Meta AI es un experto en ferretería en general. Don Confiado es un experto en TU ferretería específica. Cuando un cliente pregunta, quiere saber si TÚ lo tienes, a qué precio y en qué cantidad. Solo Don Confiado puede responder eso.",
+    metaComparacion: "Meta AI Conocimiento General vs Don Confiado RAG con tu Catálogo",
+    metaLimite: "Meta: conocimiento general de internet, no conoce tu catálogo, precios o stock específico",
+    donConfiado: "Don Confiado: conectado a TU inventario real, TUS precios actuales, TU historial de ventas",
   },
 ];
 
@@ -126,7 +150,6 @@ function checkSession(req: Request): boolean {
   return true;
 }
 
-// Keep-alive para evitar que Railway duerma el contenedor
 setInterval(() => {
   fetch(`http://0.0.0.0:${PORT}/health`)
     .then(() => console.log("💓 Keep-alive"))
@@ -237,22 +260,32 @@ app.get("/dashboard", async (req: Request, res: Response) => {
     .header{background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);color:white;padding:16px 30px;display:flex;justify-content:space-between;align-items:center}
     .header h1{font-size:20px}
     .logout{color:white;text-decoration:none;background:rgba(255,255,255,0.2);padding:8px 16px;border-radius:8px;font-size:14px}
-    .container{display:grid;grid-template-columns:320px 1fr;gap:20px;padding:20px;max-width:1400px;margin:0 auto}
+    .container{display:grid;grid-template-columns:300px 1fr;gap:20px;padding:20px;max-width:1400px;margin:0 auto}
     .panel{background:white;border-radius:12px;padding:20px;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
-    .panel h2{font-size:15px;color:#333;margin-bottom:16px}
+    .panel h2{font-size:14px;color:#333;margin-bottom:16px}
     .demo-card{border:2px solid #e8e8e8;border-radius:10px;padding:12px 16px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;gap:10px}
     .demo-card.active{border-color:#667eea;background:#f5f3ff}
     .demo-info h3{font-size:13px;color:#333;margin-bottom:3px}
     .demo-info p{font-size:11px;color:#888}
-    .btn-demo{padding:7px 14px;border:none;border-radius:7px;cursor:pointer;font-size:12px;font-weight:bold;background:#e8e8e8;color:#555;white-space:nowrap}
+    .btn-demo{padding:7px 14px;border:none;border-radius:7px;cursor:pointer;font-size:11px;font-weight:bold;background:#e8e8e8;color:#555;white-space:nowrap}
     .btn-active{background:linear-gradient(135deg,#667eea,#764ba2);color:white}
     .guide{display:grid;grid-template-columns:1fr 260px;gap:20px}
     .story{background:white;border-radius:12px;padding:24px;box-shadow:0 2px 10px rgba(0,0,0,0.08)}
     .story-badge{display:inline-block;background:#f0f0ff;color:#667eea;border-radius:20px;padding:4px 12px;font-size:11px;font-weight:bold;margin-bottom:10px}
     .story h2{font-size:17px;color:#333;margin-bottom:14px}
-    .contexto{background:#fffbf0;border-left:4px solid #f59e0b;padding:14px;border-radius:0 8px 8px 0;margin-bottom:20px}
+    .contexto{background:#fffbf0;border-left:4px solid #f59e0b;padding:14px;border-radius:0 8px 8px 0;margin-bottom:14px}
     .contexto-label{font-size:10px;font-weight:bold;color:#d97706;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
     .contexto p{font-size:13px;color:#555;line-height:1.6}
+    .ventaja-meta{background:#fef2f2;border-left:4px solid #ef4444;padding:12px;border-radius:0 8px 8px 0;margin-bottom:14px}
+    .ventaja-meta p{font-size:12px;color:#991b1b;line-height:1.5}
+    .comparacion{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+    .comp-card{border-radius:8px;padding:12px}
+    .comp-meta{background:#fff1f2;border:1px solid #fecaca}
+    .comp-dc{background:#f0fdf4;border:1px solid #bbf7d0}
+    .comp-label{font-size:10px;font-weight:bold;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+    .comp-meta .comp-label{color:#dc2626}
+    .comp-dc .comp-label{color:#16a34a}
+    .comp-text{font-size:11px;line-height:1.5;color:#444}
     .pasos-title{font-size:13px;font-weight:bold;color:#333;margin-bottom:12px}
     .paso{background:#f8f9fa;border-radius:10px;padding:14px;margin-bottom:10px;border:1px solid #e8e8e8}
     .paso-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
@@ -275,7 +308,7 @@ app.get("/dashboard", async (req: Request, res: Response) => {
     .wa-tip{font-size:10px;color:#999;margin:6px 0 12px}
     .btn-reconnect{width:100%;padding:10px;background:#25d366;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:bold;font-size:13px;margin-top:10px}
     .refresh-note{font-size:10px;color:#bbb;margin-top:8px}
-    @media(max-width:900px){.container{grid-template-columns:1fr}.guide{grid-template-columns:1fr}}
+    @media(max-width:900px){.container{grid-template-columns:1fr}.guide{grid-template-columns:1fr}.comparacion{grid-template-columns:1fr}}
   </style></head><body>
   <div class="header">
     <h1>🤝 Don Confiado — Tu Socio de Ventas</h1>
@@ -283,24 +316,43 @@ app.get("/dashboard", async (req: Request, res: Response) => {
   </div>
   <div class="container">
     <div class="panel">
-      <h2>💼 ¿Qué le quieres mostrar a tu cliente?</h2>
+      <h2>💼 ¿Qué le quieres mostrar?</h2>
       ${demosHTML}
     </div>
     <div class="guide">
       <div class="story">
-        <div class="story-badge">📖 Guía de Demo</div>
+        <div class="story-badge">📖 Guía de Demo vs Meta AI</div>
         <h2>${currentDemo.name}</h2>
+
         <div class="contexto">
           <div class="contexto-label">🎯 Situación del cliente</div>
           <p>${currentDemo.contexto}</p>
         </div>
-        <p class="pasos-title">📱 Mensajes clave — copia y pega en WhatsApp:</p>
+
+        <div class="ventaja-meta">
+          <p>${currentDemo.ventajaMeta}</p>
+        </div>
+
+        <div class="comparacion">
+          <div class="comp-card comp-meta">
+            <div class="comp-label">❌ Meta AI</div>
+            <div class="comp-text">${currentDemo.metaLimite}</div>
+          </div>
+          <div class="comp-card comp-dc">
+            <div class="comp-label">✅ Don Confiado</div>
+            <div class="comp-text">${currentDemo.donConfiado}</div>
+          </div>
+        </div>
+
+        <p class="pasos-title">📱 Mensajes para la demo — copia y pega en WhatsApp:</p>
         ${pasosHTML}
+
         <div class="argumento">
           <div class="argumento-label">💬 Argumento de cierre</div>
           <p>${currentDemo.argumento}</p>
         </div>
       </div>
+
       <div class="wa-panel">
         <h3>📱 WhatsApp</h3>
         <div class="demo-activo">${currentDemo.name}</div>

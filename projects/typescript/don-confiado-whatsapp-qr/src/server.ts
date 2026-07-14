@@ -152,8 +152,10 @@ function checkSession(req: Request): boolean {
 
 setInterval(() => {
   fetch(`http://0.0.0.0:${PORT}/health`)
-    .then(() => console.log("💓 Keep-alive"))
-    .catch(() => {});
+    .then(r => {
+      if (r.ok) console.log("💓 Keep-alive OK");
+    })
+    .catch(() => {}); // ignora errores silenciosamente
 }, 4 * 60 * 1000);
 
 app.get("/", (req: Request, res: Response) => {
@@ -239,10 +241,10 @@ app.get("/dashboard", async (req: Request, res: Response) => {
     </div>`).join('');
 
   const statusHtml = isConnected
-    ? '<div class="status connected">✅ Bot conectado — listo para demostrar</div>'
-    : currentQR
-    ? '<div class="status waiting">⏳ Escanea el QR para conectar</div>'
-    : '<div class="status connecting">🔄 Iniciando conexión...</div>';
+  ? '<div class="status connected">✅ LISTO — Envía mensajes de WhatsApp ahora</div>'
+  : currentQR
+  ? '<div class="status waiting">📱 ESCANEA el QR con tu teléfono para activar</div>'
+  : '<div class="status connecting">⏳ ESPERA — Generando QR (15-30 segundos)...</div>';
 
   const qrHtml = qrImage
     ? `<img src="${qrImage}" alt="QR" style="width:180px;height:180px;border-radius:8px;margin:8px auto;display:block"/>
@@ -404,7 +406,14 @@ app.post("/select-demo", (req: Request, res: Response) => {
   const { version } = req.body;
   if (DEMOS.find(d => d.id === version)) {
     currentVersion = version;
-    startWhatsApp(version);
+    // Solo actualiza BACKEND_URL sin reconectar WhatsApp
+    if (handler) {
+      const backendUrl = `${process.env.BACKEND_BASE_URL || "https://backend-demo-6b6e.up.railway.app"}/api/${version}`;
+      (handler as any).BACKEND_URL = backendUrl;
+      console.log(`🔄 Demo cambiado a: ${version} → ${backendUrl}`);
+    } else {
+      startWhatsApp(version);
+    }
   }
   res.redirect("/dashboard");
 });
